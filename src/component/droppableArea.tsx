@@ -1,11 +1,10 @@
 import { useDrop } from 'react-dnd';
 
 interface DroppableAreaProps {
-    id: string;
     accept: string;
 }
 
-const DroppableArea: React.FC<DroppableAreaProps> = ({ id, accept }) => {
+const DroppableArea: React.FC<DroppableAreaProps> = ({ accept }) => {
     const [{ canDrop, isOver }, drop] = useDrop({
         accept: accept,
         collect: (monitor) => ({

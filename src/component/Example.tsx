@@ -23,7 +23,7 @@ type Box = {
 export const Example: React.FC = () => {
   const [box, setBox] = React.useState<Box>({ top: 20, left: 20 });
 
-  const [collected, drag, dragPreview] = useDrag(
+  const [, drag] = useDrag(
     {
       type: "box",
       item: { top: box.top, left: box.left }
@@ -31,7 +31,7 @@ export const Example: React.FC = () => {
     [box]
   );
 
-  const [collectedProps, drop] = useDrop(
+  const [, drop] = useDrop(
     () => ({
       accept: "box",
       drop(item: Box, monitor) {
