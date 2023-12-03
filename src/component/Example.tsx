@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDrag, useDrop, XYCoord } from "react-dnd";
+import { getEmptyImage } from "react-dnd-html5-backend";
 
 const ContainerStyle: React.CSSProperties = {
   width: 500,
@@ -18,18 +19,57 @@ const BoxStyle: React.CSSProperties = {
 type Box = {
   top: number;
   left: number;
+  name: string;
+  id: string;
+};
+
+export type CardItem = {
+  top: number;
+  left: number;
+  name: string;
+  id: string;
+};
+
+const DraggableCard: React.FC<{
+  top: number;
+  left: number;
+  name: string;
+  id: string;
+}> = ({ top, left, name, id }) => {
+  const [{ isDragging }, drag, preview] = useDrag<
+    CardItem,
+    Record<string, never>,
+    { isDragging: boolean }
+  >(
+    () => ({
+      type: "box",
+      item: {
+        top,
+        left,
+        name,
+        id,
+      },
+      collect: (monitor) => ({
+        isDragging: monitor.isDragging(),
+      }),
+    }),
+    [top, left, name, id]
+  );
+  useEffect(() => {
+    preview(getEmptyImage());
+  }, []);
+  return (
+    <div ref={drag} style={{ ...BoxStyle, opacity: isDragging ? 0.5 : 1, top: top, left: left }}>
+        Drag me around
+    </div>
+  );
 };
 
 export const Example: React.FC = () => {
-  const [box, setBox] = React.useState<Box>({ top: 20, left: 20 });
-
-  const [, drag] = useDrag(
-    {
-      type: "box",
-      item: { top: box.top, left: box.left }
-    },
-    [box]
-  );
+  const [box, setBox] = React.useState([
+    { top: 100, left: 100, name: "CARD1", id: "1" },
+    { top: 200, left: 200, name: "CARD2", id: "2" },
+  ]);
 
   const [, drop] = useDrop(
     () => ({
@@ -38,8 +78,15 @@ export const Example: React.FC = () => {
         const delta = monitor.getDifferenceFromInitialOffset() as XYCoord;
         const left = Math.round(item.left + delta.x);
         const top = Math.round(item.top + delta.y);
-        setBox({ top, left });
-        return undefined;
+        setBox((prev) => [
+          ...prev.filter((data) => data.id !== item.id),
+          {
+            top:top,
+            left:left,
+            name: item.name,
+            id: item.id,
+          },
+        ]);
       }
     }),
     []
@@ -47,9 +94,9 @@ export const Example: React.FC = () => {
 
   return (
     <div ref={drop} style={ContainerStyle}>
-      <div ref={drag} style={{ ...BoxStyle, top: box.top, left: box.left }}>
-        Drag me around
-      </div>
+      {box.map((item) => (
+        <DraggableCard top={item.top} left={item.left} name={item.name} id={item.id} />
+      ))}
     </div>
   );
 };
