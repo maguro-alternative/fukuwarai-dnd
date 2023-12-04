@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useDrag, useDrop, XYCoord } from "react-dnd";
-import { getEmptyImage } from "react-dnd-html5-backend";
 
 const ContainerStyle: React.CSSProperties = {
   width: 500,
@@ -36,7 +35,7 @@ const DraggableCard: React.FC<{
   name: string;
   id: string;
 }> = ({ top, left, name, id }) => {
-  const [{ isDragging }, drag, preview] = useDrag<
+  const [{ isDragging }, drag] = useDrag<
     CardItem,
     Record<string, never>,
     { isDragging: boolean }
@@ -55,9 +54,6 @@ const DraggableCard: React.FC<{
     }),
     [top, left, name, id]
   );
-  useEffect(() => {
-    preview(getEmptyImage());
-  }, []);
   return (
     <div ref={drag} style={{ ...BoxStyle, opacity: isDragging ? 0.5 : 1, top: top, left: left }}>
         Drag me around
