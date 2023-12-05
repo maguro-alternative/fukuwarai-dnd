@@ -1,5 +1,6 @@
 import React from "react";
-import { useDrag, useDrop, XYCoord } from "react-dnd";
+import { useDrop, XYCoord } from "react-dnd";
+import { DraggableCard } from "./DraggableCard";
 
 const ContainerStyle: React.CSSProperties = {
   width: 500,
@@ -7,58 +8,11 @@ const ContainerStyle: React.CSSProperties = {
   backgroundColor: "silver"
 };
 
-const BoxStyle: React.CSSProperties = {
-  position: "absolute",
-  border: "1px dashed gray",
-  backgroundColor: "white",
-  padding: "0.5rem 1rem",
-  cursor: "move"
-};
-
 type Box = {
   top: number;
   left: number;
   name: string;
   id: string;
-};
-
-export type CardItem = {
-  top: number;
-  left: number;
-  name: string;
-  id: string;
-};
-
-const DraggableCard: React.FC<{
-  top: number;
-  left: number;
-  name: string;
-  id: string;
-}> = ({ top, left, name, id }) => {
-  const [{ isDragging }, drag] = useDrag<
-    CardItem,
-    Record<string, never>,
-    { isDragging: boolean }
-  >(
-    () => ({
-      type: "box",
-      item: {
-        top,
-        left,
-        name,
-        id,
-      },
-      collect: (monitor) => ({
-        isDragging: monitor.isDragging(),
-      }),
-    }),
-    [top, left, name, id]
-  );
-  return (
-    <div ref={drag} style={{ ...BoxStyle, opacity: isDragging ? 0.5 : 1, top: top, left: left }}>
-        Drag me around
-    </div>
-  );
 };
 
 export const Example: React.FC = () => {
