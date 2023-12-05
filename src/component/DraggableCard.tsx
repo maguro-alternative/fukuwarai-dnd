@@ -10,8 +10,8 @@ type CardItem = {
 
 const BoxStyle: React.CSSProperties = {
     position: "absolute",
-    border: "1px dashed gray",
-    backgroundColor: "white",
+    //border: "1px dashed gray",
+    //backgroundColor: "white",
     padding: "0.5rem 1rem",
     cursor: "move"
 };
@@ -44,7 +44,7 @@ export const DraggableCard: React.FC<{
     );
     return (
       <div ref={drag} style={{ ...BoxStyle, opacity: isDragging ? 0.5 : 1, top: top, left: left }}>
-          Drag me around
+          <img src={name}></img>
       </div>
     );
   };
