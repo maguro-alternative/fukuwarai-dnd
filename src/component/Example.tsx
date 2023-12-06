@@ -20,7 +20,8 @@ import nijimuraHana from "/nijimurahana.png";
 const ContainerStyle: React.CSSProperties = {
   width: 1900,
   height: 1000,
-  backgroundColor: "silver"
+  //backgroundColor: "url('/background-image.png')",
+  backgroundImage: "url('/tanjiro.jpg')",
 };
 
 type Box = {
